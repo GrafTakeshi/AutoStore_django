@@ -18,12 +18,16 @@ def cars_list_view(request):
 
 
 def car_details_view(request, car_id):
-    # получите авто, если же его нет, выбросьте ошибку 404
-    car_t = Car.objects.filter(id=car_id)
-    for i in car_t:
-        car = i
-    template_name = 'main/details.html'
-    return render(request, template_name, {'car': car})  # передайте необходимый контекст
+    try:
+        car_get = Car.objects.get(id=car_id)
+        print(car_get)
+        car_t = Car.objects.filter(id=car_id)
+        for i in car_t:
+            car = i
+        template_name = 'main/details.html'
+        return render(request, template_name, {'car': car})  # передайте необходимый контекст
+    except Car.DoesNotExist:
+        raise Http404('Car not found')
 
 
 def sales_by_car(request, car_id):
